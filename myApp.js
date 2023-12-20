@@ -36,20 +36,30 @@ const findPeopleByName = (personName, done) => {
 };
 
 const findOneByFood = (food, done) => {
-  Person.findOne({ food: food }, function (err, people) {
+  Person.findOne({ favoriteFoods: food }, function (err, people) {
     if (err) return console.log(err);
     done(null, people);
   });
 };
 
 const findPersonById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findById({ _id: personId }, function (err, people) {
+    if (err) return console.log(err);
+    done(null, people);
+  });
 };
 
 const findEditThenSave = (personId, done) => {
-  const foodToAdd = "hamburger";
+  const foodToAdd = 'hamburger';
 
-  done(null /*, data*/);
+  Person.findById(personId, (err, person) => {
+    if(err) return console.log(err); 
+    person.favoriteFoods.push(foodToAdd);
+    person.save((err, updatedPerson) => {
+      if(err) return console.log(err);
+      done(null, updatedPerson)
+    })
+  })
 };
 
 const findAndUpdate = (personName, done) => {
